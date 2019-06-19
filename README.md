@@ -27,6 +27,7 @@ docker create --name=transmission \
 -v <path to downloads>:/downloads \
 -v <path to watch folder>:/watch \
 -e PGID=<gid> -e PUID=<uid> \
+-e USER=<username> -e PASSWD=<password> \
 -e TZ=<timezone> \
 -p 9091:9091 -p 51413:51413 \
 -p 51413:51413/udp \
@@ -104,6 +105,7 @@ The automatic update will run once a day at 3am local server time.
 
 ## Versions
 
++ **19.06.19:** Set Username and Password.
 + **15.08.18:** Rebase to alpine linux 3.8.
 + **12.02.18:** Pull transmission from edge repo.
 + **10.01.18:** Rebase to alpine linux 3.7.
