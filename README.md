@@ -13,7 +13,7 @@ docker create --name=transmission \
 -e USER=<default : admin> -e PASSWD=<default : admin> \
 -p 9091:9091 -p 51413:51413 \
 -p 51413:51413/udp \
-linuxserver/transmission
+auska/docker-transmission:tagname
 ```
 
 ## 参数解释
@@ -25,6 +25,8 @@ linuxserver/transmission
 * `-v /watch` - 监视种子目录
 * `-e PGID` 用户的GroupID，留空为root
 * `-e PUID` 用户的UserID，留空为root
+* `-e USER` 登录用户名
+* `-e PASSWD` 登录密码
 * `-e TZ` 时区 默认 Asia/Shanghai
 
 ## 版本介绍
