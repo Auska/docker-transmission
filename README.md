@@ -28,6 +28,8 @@ auska/docker-transmission:tagname
 * `-e USER` 登录用户名
 * `-e PASSWD` 登录密码
 * `-e TZ` 时区 默认 Asia/Shanghai
+* `-e WEBUI_PORT` 配置网页UI端口
+* `-e PORT` 配置BT软件通讯端口
 
 ## 版本介绍
 
