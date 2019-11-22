@@ -2,5 +2,5 @@
 
 exec \
 	s6-setuidgid abc /usr/bin/transmission-daemon \
-	-p $WEBUI_PORT -P $PORT \
+	-u $USER -v $PASSWD -p $WEBUI_PORT -P $PORT \
 	-g /config -c /watch -f
