@@ -8,8 +8,8 @@ RUN \
  echo "**** install packages ****" && \
  apk add --no-cache git build-base transmission-daemon autoconf automake pkgconf curl-dev libevent-dev intltool libtool bsd-compat-headers && \
 	git clone https://github.com/ronggang/transmission-web-control.git /tmp/twc && \
-	cd /tmp && \
-	tar zcf twc.tar.gz twc/src/* && \
+	cd /tmp/twc/src/ && \
+	tar zcf /tmp/twc.tar.gz * && \
 	mkdir transmission && cd transmission && \
 	wget https://github.com/transmission/transmission-releases/raw/master/transmission-$VER.tar.xz && \
 	tar xf transmission-$VER.tar.xz && \
@@ -38,8 +38,9 @@ COPY root/ /
 RUN \
  echo "**** install packages ****" && \
  apk add --no-cache transmission-cli transmission-daemon && \
-	cp -rf /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
-	tar xf /tmp/twc.tar.gz -C /usr/share/transmission/web/
+	mv /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
+	tar xf /tmp/twc.tar.gz -C /usr/share/transmission/web/ && \
+	rm -rf /tmp/*
 
 # ports and volumes
 EXPOSE 9091 51413
