@@ -1,3 +1,12 @@
+FROM lsiobase/alpine:3.11 as get
+
+RUN \
+ echo "**** install packages ****" && \
+ apk add --no-cache git && \
+	git clone https://github.com/ronggang/transmission-web-control.git /tmp/twc && \
+	cd /tmp && \
+	tar zcfP twc.tar.gz /tmp/twc/src/*
+
 FROM lsiobase/alpine:3.11
 
 # set version label
@@ -6,29 +15,17 @@ ARG VERSION
 LABEL build_version="blog.auska.win version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="Auska"
 
-ENV TZ=Asia/Shanghai WEBUI_VERSION=1.6.0-beta2 USER=admin PASSWD=admin WEBUI_PORT=9091 PORT=51413
+ENV TZ=Asia/Shanghai USER=admin PASSWD=admin WEBUI_PORT=9091 PORT=51413
+
+# copy local files
+COPY --from=get  /tmp/twc.tar.gz  /tmp
+COPY root/ /
 
 RUN \
  echo "**** install packages ****" && \
- apk add --no-cache \
-	curl \
-	jq \
-	openssl \
-	p7zip \
-	rsync \
-	tar \
-	transmission-cli \
-	transmission-daemon \
-	unrar \
-	unzip && \
-curl -fSL https://github.com/ronggang/transmission-web-control/archive/v${WEBUI_VERSION}.zip -o twc.zip && \
-unzip twc.zip -d /tmp && \
-cp -rf /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
-cp -rf /tmp/transmission-web-control-${WEBUI_VERSION}/src/* /usr/share/transmission/web/ && \
-rm -rf /tmp/*
-
-# copy local files
-COPY root/ /
+ apk add --no-cache transmission-cli transmission-daemon && \
+	cp -rf /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
+	tar xf /tmp/twc.tar.gz -C /usr/share/transmission/web/
 
 # ports and volumes
 EXPOSE 9091 51413
