@@ -5,7 +5,7 @@ RUN \
  apk add --no-cache git && \
 	git clone https://github.com/ronggang/transmission-web-control.git /tmp/twc && \
 	cd /tmp && \
-	tar zcfP twc.tar.gz /tmp/twc/src/*
+	tar zcf twc.tar.gz twc/src/*
 
 FROM lsiobase/alpine:3.11
 
