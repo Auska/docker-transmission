@@ -24,8 +24,9 @@ COPY root/ /
 RUN \
  echo "**** install packages ****" && \
  apk add --no-cache transmission-cli transmission-daemon && \
-	cp -rf /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
-	tar xf /tmp/twc.tar.gz -C /usr/share/transmission/web/
+	mv /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
+	tar xf /tmp/twc.tar.gz -C /usr/share/transmission/web/ && \
+	rm -rf /tmp/*
 
 # ports and volumes
 EXPOSE 9091 51413
