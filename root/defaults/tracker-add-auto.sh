@@ -1,7 +1,7 @@
 #!/bin/bash
 # Get transmission credentials and ip or dns address
 auth=$USER:$PASSWD
-host=$PORT
+host=$WEBUI_PORT
 
 [[ $UPDATE == No ]] && exit 1
 

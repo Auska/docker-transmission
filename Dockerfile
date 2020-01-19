@@ -28,7 +28,7 @@ ARG VERSION
 LABEL build_version="blog.auska.win version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="Auska"
 
-ENV TZ=Asia/Shanghai USER=admin PASSWD=admin WEBUI_PORT=9091 PORT=51413
+ENV TZ=Asia/Shanghai USER=admin PASSWD=admin WEBUI_PORT=9091 PORT=51413 UPDATE=No
 
 # copy local files
 COPY --from=build  /tmp/twc.tar.gz  /tmp
@@ -37,7 +37,7 @@ COPY root/ /
 
 RUN \
  echo "**** install packages ****" && \
- apk add --no-cache transmission-cli transmission-daemon && \
+ apk add --no-cache transmission-cli transmission-daemon curl && \
 	mv /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
 	tar xf /tmp/twc.tar.gz -C /usr/share/transmission/web/ && \
 	rm -rf /tmp/*
