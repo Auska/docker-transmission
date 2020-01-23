@@ -30,13 +30,13 @@ else
     echo ' done.'
 fi
 done
-files="$(transmission-remote "$host" --auth="$auth" --torrent "${torrent_hash}" -f | awk '$7 ~ /padding_file/ {print $1}' | sed -e 's/://')"
+files="$(transmission-remote "$host" --auth="$auth" --torrent "${torrent_hash}" -f | awk '/padding_file/ {print $1}' | sed -e 's/://')"
 for file in $files ; do
-	echo -n "${file}..."
+    echo -n "${file}-"
 if transmission-remote "$host"  --auth="$auth" --torrent "${torrent_hash}" -G "${file}" | grep -q 'success'; then
-    echo -n ' failed.'
+    echo -n 'failed.'
 else
-    echo -n ' done.'
+    echo -n 'done.'
 fi
 done
 done
