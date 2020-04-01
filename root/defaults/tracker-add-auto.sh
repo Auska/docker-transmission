@@ -11,7 +11,7 @@ add_trackers () {
     torrent_hash=$1
     id=$2
     trackerslist=/tmp/trackers.txt
-for base_url in https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_best.txt ; do
+for base_url in https://trackerslist.com/best.txt ; do
 if [ ! -f $trackerslist ]; then
 curl -o "$trackerslist" "${base_url}"
 fi
