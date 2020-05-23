@@ -2,7 +2,7 @@ FROM lsiobase/alpine:3.11 as build
 
 COPY root/ /
 
-ENV VER=2.94
+ENV VER=3.00
 
 RUN \
  echo "**** install packages ****" && \
