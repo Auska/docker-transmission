@@ -1,22 +1,22 @@
 diff --git a/libtransmission/handshake.c b/libtransmission/handshake.c
-index 8dc08d3..f6dda7a 100644
+index bab0e2d..9b043ea 100644
 --- a/libtransmission/handshake.c
 +++ b/libtransmission/handshake.c
-@@ -282,6 +282,8 @@ parseHandshake (tr_handshake *    handshake,
-   handshake->havePeerID = true;
-   dbgmsg (handshake, "peer-id is [%*.*s]", PEER_ID_LEN, PEER_ID_LEN, peer_id);
+@@ -271,6 +271,8 @@ static handshake_parse_err_t parseHandshake(tr_handshake* handshake, struct evbu
+     handshake->havePeerID = true;
+     dbgmsg(handshake, "peer-id is [%*.*s]", PEER_ID_LEN, PEER_ID_LEN, peer_id);
  
-+  if(client_banned(peer_id)) return HANDSHAKE_ENCRYPTION_WRONG;
++    if(client_banned(peer_id)) return HANDSHAKE_ENCRYPTION_WRONG;
 +
-   tor = tr_torrentFindFromHash (handshake->session, hash);
-   if (!memcmp (peer_id, tr_torrentGetPeerId(tor), PEER_ID_LEN))
-     {
+     tor = tr_torrentFindFromHash(handshake->session, hash);
+ 
+     if (memcmp(peer_id, tr_torrentGetPeerId(tor), PEER_ID_LEN) == 0)
 diff --git a/libtransmission/peer-mgr.c b/libtransmission/peer-mgr.c
-index 30e9036..f2e490b 100644
+index d1239cc..49832ac 100644
 --- a/libtransmission/peer-mgr.c
 +++ b/libtransmission/peer-mgr.c
-@@ -1939,6 +1939,20 @@ createBitTorrentPeer (tr_torrent       * tor,
-   tr_peerMsgsUpdateActive (msgs, TR_DOWN);
+@@ -2007,6 +2007,21 @@ static void createBitTorrentPeer(tr_torrent* tor, struct tr_peerIo* io, struct p
+     tr_peerMsgsUpdateActive(msgs, TR_DOWN);
  }
  
 +bool client_banned (const uint8_t * peer_id)
@@ -33,28 +33,29 @@ index 30e9036..f2e490b 100644
 +    // tr_logAddNamedError ("Client banned.", "(Client filter)");
 +  return banned;
 +}
- 
++
  /* FIXME: this is kind of a mess. */
- static bool
-@@ -2016,7 +2030,7 @@ myHandshakeDoneCB (tr_handshake  * handshake,
-       if (io->utp_socket)
-         atom->flags |= ADDED_F_UTP_FLAGS;
+ static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readAnythingFromPeer, bool isConnected,
+     uint8_t const* peer_id, void* vmanager)
+@@ -2080,7 +2095,7 @@ static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readA
+             atom->flags |= ADDED_F_UTP_FLAGS;
+         }
  
--      if (atom->flags2 & MYFLAG_BANNED)
-+      if ((atom->flags2 & MYFLAG_BANNED)|client_banned(peer_id))
+-        if ((atom->flags2 & MYFLAG_BANNED) != 0)
++        if ((atom->flags2 & MYFLAG_BANNED)|client_banned(peer_id) != 0)
          {
-           tordbg (s, "banned peer %s tried to reconnect",
-                   tr_atomAddrStr (atom));
+             tordbg(s, "banned peer %s tried to reconnect", tr_atomAddrStr(atom));
+         }
 diff --git a/libtransmission/peer-mgr.h b/libtransmission/peer-mgr.h
-index 5ee45ae..56d1227 100644
+index 2dd414a..150b174 100644
 --- a/libtransmission/peer-mgr.h
 +++ b/libtransmission/peer-mgr.h
-@@ -84,6 +84,8 @@ void         tr_peerMgrFree                 (tr_peerMgr          * manager);
- bool         tr_peerMgrPeerIsSeed           (const tr_torrent    * tor,
-                                              const tr_address    * addr);
+@@ -76,6 +76,8 @@ void tr_peerMgrFree(tr_peerMgr* manager);
  
-+bool	     client_banned		    (const uint8_t * peer_id);
+ bool tr_peerMgrPeerIsSeed(tr_torrent const* tor, tr_address const* addr);
+ 
++bool client_banned(const uint8_t * peer_id);
 +
- void         tr_peerMgrSetUtpSupported      (tr_torrent          * tor,
-                                              const tr_address    * addr);
+ void tr_peerMgrSetUtpSupported(tr_torrent* tor, tr_address const* addr);
  
+ void tr_peerMgrSetUtpFailed(tr_torrent* tor, tr_address const* addr, bool failed);
