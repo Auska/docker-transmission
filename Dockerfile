@@ -1,6 +1,6 @@
 FROM lsiobase/alpine:3.11 as build
 
-ENV VER=3.00
+ENV VER=2.94
 
 RUN \
  echo "**** install packages ****" && \
