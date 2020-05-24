@@ -12,7 +12,7 @@ index bab0e2d..9b043ea 100644
  
      if (memcmp(peer_id, tr_torrentGetPeerId(tor), PEER_ID_LEN) == 0)
 diff --git a/libtransmission/peer-mgr.c b/libtransmission/peer-mgr.c
-index d1239cc..49832ac 100644
+index d1239cc..3b397e0 100644
 --- a/libtransmission/peer-mgr.c
 +++ b/libtransmission/peer-mgr.c
 @@ -2007,6 +2007,21 @@ static void createBitTorrentPeer(tr_torrent* tor, struct tr_peerIo* io, struct p
@@ -37,12 +37,16 @@ index d1239cc..49832ac 100644
  /* FIXME: this is kind of a mess. */
  static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readAnythingFromPeer, bool isConnected,
      uint8_t const* peer_id, void* vmanager)
-@@ -2080,7 +2095,7 @@ static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readA
+@@ -2080,7 +2095,11 @@ static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readA
              atom->flags |= ADDED_F_UTP_FLAGS;
          }
  
 -        if ((atom->flags2 & MYFLAG_BANNED) != 0)
-+        if ((atom->flags2 & MYFLAG_BANNED)|client_banned(peer_id) != 0)
++        if (client_banned(peer_id))
++        {
++            tordbg(s, "banned peer %s tried to banned client", tr_atomAddrStr(atom));
++        }
++        else if ((atom->flags2 & MYFLAG_BANNED) != 0)
          {
              tordbg(s, "banned peer %s tried to reconnect", tr_atomAddrStr(atom));
          }
