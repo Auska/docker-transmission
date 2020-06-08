@@ -1,4 +1,4 @@
-FROM lsiobase/alpine:3.11 as build
+FROM lsiobase/alpine:3.12 as build
 
 COPY root/ /
 
@@ -20,7 +20,7 @@ RUN \
 	mkdir /done && \
 	cp --parents /usr/local/bin/transmission-daemon /done
 
-FROM lsiobase/alpine:3.11
+FROM lsiobase/alpine:3.12
 
 # set version label
 ARG BUILD_DATE
