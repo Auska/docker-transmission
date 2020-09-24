@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv bash
 
 exec \
-	s6-setuidgid abc /usr/local/bin/transmission-daemon \
+	s6-setuidgid abc /usr/bin/transmission-daemon \
 	-u $USER -v $PASSWD -p $WEBUI_PORT -P $PORT \
 	-g /config -c /watch -f
