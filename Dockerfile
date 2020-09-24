@@ -6,13 +6,13 @@ ENV VER=3.00
 
 RUN \
  echo "**** install packages ****" && \
- apk add --no-cache git build-base pkgconf curl-dev libevent-dev intltool libtool bsd-compat-headers && \
+ apk add --no-cache git build-base pkgconf zlib-static openssl-libs-static curl-dev curl-static nghttp2-dev nghttp2-static libevent-dev libevent-static intltool libtool bsd-compat-headers && \
 	mkdir transmission && cd transmission && \
 	wget https://github.com/transmission/transmission-releases/raw/master/transmission-$VER.tar.xz && \
 	tar xf transmission-$VER.tar.xz && \
 	cd transmission-$VER && \
-	./configure --prefix=/usr && \
-	make install-strip && \
+	./configure --prefix=/usr --enable-utp --with-inotify --enable-cli LIBCURL_LIBS="$(pkg-config --libs --static libcurl)" && \
+	make install-strip LDFLAGS="-all-static" && \
 	mv /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
 	git clone --depth=1 https://github.com/ronggang/transmission-web-control.git /tmp/twc && \
 	cd /tmp/twc/src/ && \
