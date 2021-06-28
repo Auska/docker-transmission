@@ -30,7 +30,7 @@ ARG VERSION
 LABEL build_version="blog.auska.win version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="Auska"
 
-ENV TZ=Asia/Shanghai USER=admin PASSWD=admin WEBUI_PORT=9091 PORT=51413 UPDATE=No
+ENV TZ=Asia/Shanghai USER=admin PASSWD=admin WEBUI_PORT=9091 PORT=51413
 
 # copy local files
 COPY --from=build  /done  /

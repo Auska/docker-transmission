@@ -12,10 +12,6 @@ mkdir -p \
 [[ ! -f /config/blocklist-update.sh ]] && cp \
 	/defaults/blocklist-update.sh /config/blocklist-update.sh
 
-# copy trackerlist-update script
-[[ ! -f /config/tracker-add-auto.sh ]] && cp \
-	/defaults/tracker-add-auto.sh /config/tracker-add-auto.sh
-
 # permissions
 chown -R abc:abc \
 	/config \
@@ -23,4 +19,3 @@ chown -R abc:abc \
 	/watch
 
 chmod 755 /config/blocklist-update.sh
-chmod 755 /config/tracker-add-auto.sh
