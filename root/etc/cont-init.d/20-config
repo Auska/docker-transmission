@@ -15,7 +15,7 @@ mkdir -p \
 # permissions
 chown -R abc:abc \
 	/config \
-	/downloads \
+	/media \
 	/watch
 
 chmod 755 /config/blocklist-update.sh

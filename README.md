@@ -6,7 +6,7 @@ http://blog.auska.win
 ```
 docker create --name=transmission \
 -v <path to data>:/config \
--v <path to downloads>:/downloads \
+-v <path to downloads>:/media \
 -v <path to watch folder>:/watch \
 -e PGID=<gid> -e PUID=<uid> \
 -e TZ=<timezone> \
@@ -21,7 +21,7 @@ auska/docker-transmission:tagname
 * `-p 9091` 网页UI端口
 * `-p 51413` - BT软件通讯端口
 * `-v /config` - 配置文件目录
-* `-v /downloads` - 下载文件目录
+* `-v /media` - 下载文件目录
 * `-v /watch` - 监视种子目录
 * `-e PGID` 用户的GroupID，留空为root
 * `-e PUID` 用户的UserID，留空为root

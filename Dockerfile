@@ -12,6 +12,7 @@ RUN \
 	tar xf transmission-$VER.tar.xz && \
 	cd transmission-$VER && \
 	patch -p1 < /defaults/00-xl.patch && \
+	patch -p1 < /defaults/01-sequential.patch && \
 	./configure --prefix=/usr --enable-utp --with-inotify --enable-cli LIBCURL_LIBS="$(pkg-config --libs --static libcurl)" && \
 	make install-strip LDFLAGS="-all-static" && \
 	mv /usr/share/transmission/web/index.html /usr/share/transmission/web/index.original.html && \
@@ -42,4 +43,4 @@ RUN \
 
 # ports and volumes
 EXPOSE 9091 51413
-VOLUME /config /downloads /watch
+VOLUME /config /media /watch

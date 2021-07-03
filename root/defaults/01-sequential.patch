@@ -1,0 +1,46 @@
+diff --git a/libtransmission/peer-mgr.c b/libtransmission/peer-mgr.c
+index d1239cc..8f43845 100644
+--- a/libtransmission/peer-mgr.c
++++ b/libtransmission/peer-mgr.c
+@@ -1148,7 +1148,7 @@ static void pieceListRebuild(tr_swarm* s)
+         s->pieces = pieces;
+         s->pieceCount = pieceCount;
+ 
+-        pieceListSort(s, PIECES_SORTED_BY_WEIGHT);
++        pieceListSort(s, PIECES_SORTED_BY_INDEX);
+ 
+         /* cleanup */
+         tr_free(pool);
+@@ -1184,6 +1184,8 @@ static void pieceListResortPiece(tr_swarm* s, struct weighted_piece* p)
+         return;
+     }
+ 
++    return;
++
+     /* is the torrent already sorted? */
+     pos = p - s->pieces;
+     setComparePieceByWeightTorrent(s);
+@@ -1198,9 +1200,9 @@ static void pieceListResortPiece(tr_swarm* s, struct weighted_piece* p)
+         isSorted = false;
+     }
+ 
+-    if (s->pieceSortState != PIECES_SORTED_BY_WEIGHT)
++    if (s->pieceSortState != PIECES_SORTED_BY_INDEX)
+     {
+-        pieceListSort(s, PIECES_SORTED_BY_WEIGHT);
++        pieceListSort(s, PIECES_SORTED_BY_INDEX);
+         isSorted = true;
+     }
+ 
+@@ -1360,9 +1362,9 @@ void tr_peerMgrGetNextRequests(tr_torrent* tor, tr_peer* peer, int numwant, tr_b
+         pieceListRebuild(s);
+     }
+ 
+-    if (s->pieceSortState != PIECES_SORTED_BY_WEIGHT)
++    if (s->pieceSortState != PIECES_SORTED_BY_INDEX)
+     {
+-        pieceListSort(s, PIECES_SORTED_BY_WEIGHT);
++        pieceListSort(s, PIECES_SORTED_BY_INDEX);
+     }
+ 
+     assertReplicationCountIsExact(s);
