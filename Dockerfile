@@ -11,7 +11,7 @@ RUN \
 	wget https://github.com/transmission/transmission-releases/raw/master/transmission-$VER.tar.xz && \
 	tar xf transmission-$VER.tar.xz && \
 	cd transmission-$VER && \
-	patch -p1 < /defaults/00-xl.patch && \
+	patch -p1 < /defaults/00-whitelist.patch && \
 	patch -p1 < /defaults/01-sequential.patch && \
 	./configure --prefix=/usr --enable-utp --with-inotify --enable-cli LIBCURL_LIBS="$(pkg-config --libs --static libcurl)" && \
 	make install-strip LDFLAGS="-all-static" && \

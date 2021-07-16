@@ -1,21 +1,21 @@
 diff --git a/libtransmission/handshake.c b/libtransmission/handshake.c
-index bab0e2d..9b043ea 100644
+index bab0e2d..6720dab 100644
 --- a/libtransmission/handshake.c
 +++ b/libtransmission/handshake.c
 @@ -271,6 +271,8 @@ static handshake_parse_err_t parseHandshake(tr_handshake* handshake, struct evbu
      handshake->havePeerID = true;
      dbgmsg(handshake, "peer-id is [%*.*s]", PEER_ID_LEN, PEER_ID_LEN, peer_id);
  
-+    if(client_banned(peer_id)) return HANDSHAKE_ENCRYPTION_WRONG;
++    if(!client_banned(peer_id)) return HANDSHAKE_ENCRYPTION_WRONG;
 +
      tor = tr_torrentFindFromHash(handshake->session, hash);
  
      if (memcmp(peer_id, tr_torrentGetPeerId(tor), PEER_ID_LEN) == 0)
 diff --git a/libtransmission/peer-mgr.c b/libtransmission/peer-mgr.c
-index d1239cc..3b397e0 100644
+index d1239cc..1d287c8 100644
 --- a/libtransmission/peer-mgr.c
 +++ b/libtransmission/peer-mgr.c
-@@ -2007,6 +2007,21 @@ static void createBitTorrentPeer(tr_torrent* tor, struct tr_peerIo* io, struct p
+@@ -2007,6 +2007,23 @@ static void createBitTorrentPeer(tr_torrent* tor, struct tr_peerIo* io, struct p
      tr_peerMsgsUpdateActive(msgs, TR_DOWN);
  }
  
@@ -23,12 +23,14 @@ index d1239cc..3b397e0 100644
 +{
 +  bool banned = false;
 +  if (peer_id == NULL) return banned;
-+  banned |= !memcmp(peer_id+1, "SD", 2);
-+  banned |= !memcmp(peer_id+1, "XF", 2);
-+  banned |= !memcmp(peer_id+1, "QD", 2);
-+  banned |= !memcmp(peer_id+1, "BN", 2);
-+  banned |= !memcmp(peer_id+1, "DL", 2);
-+  banned |= !memcmp(peer_id+1, "XL", 2);
++  banned |= !memcmp(peer_id+1, "BI", 2);
++  banned |= !memcmp(peer_id+1, "BT", 2);
++  banned |= !memcmp(peer_id+1, "DE", 2);
++  banned |= !memcmp(peer_id+1, "LT", 2);
++  banned |= !memcmp(peer_id+1, "lt", 2);
++  banned |= !memcmp(peer_id+1, "qB", 2);
++  banned |= !memcmp(peer_id+1, "TR", 2);
++  banned |= !memcmp(peer_id+1, "UT", 2);
 +  // if (banned)
 +    // tr_logAddNamedError ("Client banned.", "(Client filter)");
 +  return banned;
@@ -37,12 +39,12 @@ index d1239cc..3b397e0 100644
  /* FIXME: this is kind of a mess. */
  static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readAnythingFromPeer, bool isConnected,
      uint8_t const* peer_id, void* vmanager)
-@@ -2080,7 +2095,11 @@ static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readA
+@@ -2080,7 +2097,11 @@ static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readA
              atom->flags |= ADDED_F_UTP_FLAGS;
          }
  
 -        if ((atom->flags2 & MYFLAG_BANNED) != 0)
-+        if (client_banned(peer_id))
++        if (!client_banned(peer_id))
 +        {
 +            tordbg(s, "banned peer %s tried to banned client", tr_atomAddrStr(atom));
 +        }
