@@ -31,7 +31,6 @@ auska/docker-transmission:tagname
 * `-e WEBUI_PORT` 配置网页UI端口
 * `-e PORT` 配置BT软件通讯端口
 
-## 版本介绍
+## 更新日志
 
-latest ： 仅仅使用了TWC的UI，适合挂PT使用。
-bt     ： 包括了自动添加公用tracker和屏蔽吸血客户端的新功能（迅雷）。
+- 20240808 客户端过滤采用白名单模式
